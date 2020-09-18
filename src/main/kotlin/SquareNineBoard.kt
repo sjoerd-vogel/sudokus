@@ -1,30 +1,49 @@
-class SquareNineBoard private constructor() {
-    private val elements: Set<Int> =
-        setOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-    private val cells: Map<Pair<Int, Int>, Cell<out Int>> =
-        (1..9).flatMap { i -> (1..9).map { j -> Pair(i, j) } }
-            .map { p -> Pair(p, Cell(this, p.first, p.second, ConstructionEmptyCell)) }
-            .toMap()
+import SquareNineBoard.State.Valued
+import SquareNineBoard.State.Empty
+import SquareNineBoard.State.Fixed
+
+class SquareNineBoard {
+    private val values: Set<Int> =
+            setOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    private val cells: List<Cell<out Int>> =
+            (1..9).tensor(1..9)
+                    .map { Coord(it.first, it.second) }
+                    .map { it.initialCell() }
+
+    override fun toString(): String =
+            cells.map { it.toString() }
+                    .joinToString("\n")
 
     private data class Cell<T>(
-        private val board: SquareNineBoard,
-        private val row: Int,
-        private val column: Int,
-        private val state: CellState<T>
-    )
+            private val board: SquareNineBoard,
+            private val coord: Coord,
+            private val state: State<T>
+    ) {
 
-    private interface CellState<T>
-    private interface ConstructionCellState<T> : CellState<T>
-
-    private object ConstructionEmptyCell : ConstructionCellState<Nothing>
-    private data class ConstructionValueCell<T>(val value: T) : ConstructionCellState<T>
-
-    private object EmptyCell : CellState<Nothing>
-    private data class FixedCell<T>(val value: T) : CellState<T>
-    private data class ValueCell<T>(val value: T) : CellState<T>
-
-    companion object {
-        fun getForConstruction(): SquareNineBoard = SquareNineBoard()
+        override public fun toString(): String =
+                coord.toString() + " -> " +
+                        state.toString()
     }
+
+
+    private fun Coord.initialCell(): Cell<Int> =
+            Cell(this@SquareNineBoard, this@initialCell, Valued(values.first()))
+
+    private data class Coord(val row: Int, val column: Int)
+
+    private interface State<T> {
+        object Empty : State<Nothing> {
+            override fun toString(): String = "{}"
+        }
+
+        data class Fixed<T>(val value: T) : State<T> {
+            override fun toString(): String = "{" + value.toString() + "}"
+        }
+
+        data class Valued<T>(val value: T) : State<T> {
+            override fun toString(): String = "{" + value.toString() + "}"
+        }
+    }
+
 }
 
