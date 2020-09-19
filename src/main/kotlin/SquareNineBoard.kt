@@ -1,20 +1,22 @@
 import SquareNineBoard.State.Valued
-import SquareNineBoard.State.Empty
-import SquareNineBoard.State.Fixed
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toPersistentList
 
 class SquareNineBoard {
-    private val values: Set<Int> = setOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-    private val cells: List<Cell<out Int>> = (1..9).selfTensor()
-            .map { Coord(it) }
-            .map { it.initialCell() }
+    private val values = persistentSetOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+    private val cells: PersistentList<Cell<out Int>> = (1..9).selfTensor()
+        .map { Coord(it) }
+        .map { it.initialCell() }
+        .toPersistentList()
 
     override fun toString(): String = cells.map { it.toString() }
-            .joinToString("\n")
+        .joinToString("\n")
 
     private data class Cell<T>(
-            private val board: SquareNineBoard,
-            private val coord: Coord,
-            private val state: State<T>
+        private val board: SquareNineBoard,
+        private val coord: Coord,
+        private val state: State<T>
     ) {
 
         override fun toString(): String = "${coord} -> ${state}"
@@ -22,7 +24,7 @@ class SquareNineBoard {
 
 
     private fun Coord.initialCell(): Cell<Int> = Cell(
-            this@SquareNineBoard, this@initialCell, Valued(values.first())
+        this@SquareNineBoard, this@initialCell, Valued(values.first())
     )
 
     private data class Coord(val column: Int, val row: Int) {
