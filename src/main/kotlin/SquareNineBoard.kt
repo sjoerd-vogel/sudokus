@@ -2,11 +2,10 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentList
 
-class SquareNineBoard {
+class SquareNineBoard private constructor(private val cells: PersistentList<Cell<Int>>) {
+    constructor() : this(defaultCells())
+
     private val values = persistentSetOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
-    private val cells: PersistentList<Cell<Int>> = (1..9).selfTensor()
-        .map { Cell<Int>(it) }
-        .toPersistentList()
 
     override fun toString(): String = cells.map { it.toString() }
         .joinToString("\n")
@@ -41,5 +40,10 @@ class SquareNineBoard {
         }
     }
 
+    private companion object {
+        private fun defaultCells() = (1..9).selfTensor()
+            .map { Cell<Int>(it) }
+            .toPersistentList()
+    }
 }
 
