@@ -14,7 +14,6 @@ class SquareNineBoard {
         .joinToString("\n")
 
     private data class Cell<T>(
-        private val board: SquareNineBoard,
         private val coord: Coord,
         private val state: State<T>
     ) {
