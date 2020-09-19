@@ -1,11 +1,13 @@
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentList
 
-class SquareNineBoard private constructor(private val cells: PersistentList<Cell<Int>>) {
-    constructor() : this(defaultCells())
-
-    private val values = persistentSetOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+class SquareNineBoard<T> private constructor(
+    private val values: PersistentSet<T>,
+    private val cells: PersistentList<Cell<T>>
+) {
+    constructor(values: PersistentSet<T>) : this(values, defaultCells())
 
     override fun toString(): String = cells.map { it.toString() }
         .joinToString("\n")
@@ -41,8 +43,8 @@ class SquareNineBoard private constructor(private val cells: PersistentList<Cell
     }
 
     private companion object {
-        private fun defaultCells() = (1..9).selfTensor()
-            .map { Cell<Int>(it) }
+        private fun <T> defaultCells() = (1..9).selfTensor()
+            .map { Cell<T>(it) }
             .toPersistentList()
     }
 }
