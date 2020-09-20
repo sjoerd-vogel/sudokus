@@ -7,8 +7,7 @@ class SquareNineBoard<T> private constructor(
 ) {
     constructor(values: PersistentSet<T>) : this(values, defaultCells())
 
-    override fun toString(): String = cells.map { it.toString() }
-        .joinToString("\n")
+    override fun toString(): String = cells.joinToString("\n")
 
     fun set(coord: Coord, value: T) = SquareNineBoard(
         values,
