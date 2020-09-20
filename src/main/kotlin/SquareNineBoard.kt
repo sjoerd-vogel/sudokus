@@ -1,5 +1,4 @@
 import kotlinx.collections.immutable.PersistentSet
-import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentSet
 
 class SquareNineBoard<T> private constructor(
