@@ -3,10 +3,9 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentSet
 
 class SquareNineBoard<T> private constructor(
-    val values: PersistentSet<T>,
     val cells: PersistentSet<Cell<T>>
 ) {
-    constructor(values: PersistentSet<T>) : this(values, defaultCells())
+    constructor() : this(defaultCells())
 
     override fun toString(): String = cells.joinToString("\n")
 
@@ -24,7 +23,6 @@ class SquareNineBoard<T> private constructor(
         .toPersistentSet()
 
     fun set(coord: Coord, value: T) = SquareNineBoard(
-        values,
         cells.map {
             if (it.coord != coord) it
             else Cell(coord, State.Valued(value))
@@ -32,7 +30,6 @@ class SquareNineBoard<T> private constructor(
     )
 
     fun empty(coord: Coord) = SquareNineBoard(
-        values,
         cells.map {
             if (it.coord != coord) it
             else Cell<T>(coord, State.Empty)
