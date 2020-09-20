@@ -1,3 +1,3 @@
 fun main() {
-    println(SquareNineBoard<String>())
+    println(getPopulatedBoard(1..9))
 }
