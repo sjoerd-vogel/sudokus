@@ -1,4 +1,5 @@
 import kotlinx.collections.immutable.PersistentSet
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentSet
 
 class SquareNineBoard<T> private constructor(
@@ -8,6 +9,19 @@ class SquareNineBoard<T> private constructor(
     constructor(values: PersistentSet<T>) : this(values, defaultCells())
 
     override fun toString(): String = cells.joinToString("\n")
+
+    val sectors: PersistentSet<Sector> = (1..3).selfTensor()
+        .map { Coord(it) }
+        .map { sc ->
+            Sector(
+                sc,
+                (1..3).selfTensor()
+                    .map { bc -> Coord(bc) }
+                    .map { bc -> bc + (sc - Coord(1, 1)) * Coord(3, 3) }
+                    .toPersistentSet()
+            )
+        }
+        .toPersistentSet()
 
     fun set(coord: Coord, value: T) = SquareNineBoard(
         values,
@@ -32,6 +46,10 @@ class SquareNineBoard<T> private constructor(
         .toPersistentSet()
 
     fun getColumn(column: Int): PersistentSet<Cell<T>> = cells.filter { it.coord.column == column }
+        .toPersistentSet()
+
+    fun getSector(coord: Coord) = sectors.filter { it.sectorCoord == coord }
+        .map { sec -> cells.filter { cell -> cell.coord in sec.boardCoords } }
         .toPersistentSet()
 
     private companion object {
