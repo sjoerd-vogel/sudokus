@@ -1,51 +1,44 @@
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.PersistentSet
-import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toPersistentSet
 
 class SquareNineBoard<T> private constructor(
-    private val values: PersistentSet<T>,
-    private val cells: PersistentList<Cell<T>>
+    val values: PersistentSet<T>,
+    val cells: PersistentSet<Cell<T>>
 ) {
     constructor(values: PersistentSet<T>) : this(values, defaultCells())
 
     override fun toString(): String = cells.map { it.toString() }
         .joinToString("\n")
 
-    private data class Cell<T>(
-        private val coord: Coord,
-        private val state: State<out T> = State.Empty
-    ) {
-        constructor(pair: Pair<Int, Int>) : this(Coord(pair))
+    fun set(coord: Coord, value: T) = SquareNineBoard(
+        values,
+        cells.map {
+            if (it.coord != coord) it
+            else Cell(coord, State.Valued(value))
+        }.toPersistentSet()
+    )
 
-        override fun toString(): String = "${coord} -> ${state}"
-    }
+    fun empty(coord: Coord) = SquareNineBoard(
+        values,
+        cells.map {
+            if (it.coord != coord) it
+            else Cell<T>(coord, State.Empty)
+        }.toPersistentSet()
+    )
 
+    fun getCell(coord: Coord): Cell<T> = cells.filter { it.coord == coord }
+        .first()
 
-    private data class Coord(val column: Int, val row: Int) {
-        constructor(pair: Pair<Int, Int>) : this(pair.first, pair.second)
+    fun getRow(row: Int): PersistentSet<Cell<T>> = cells.filter { it.coord.row == row }
+        .toPersistentSet()
 
-        override fun toString(): String = "(column=${column},row=${row})"
-    }
-
-    private interface State<T> {
-        object Empty : State<Nothing> {
-            override fun toString(): String = "{}"
-        }
-
-        data class Fixed<T>(val value: T) : State<T> {
-            override fun toString(): String = "{${value}}"
-        }
-
-        data class Valued<T>(val value: T) : State<T> {
-            override fun toString(): String = "{${value}}"
-        }
-    }
+    fun getColumn(column: Int): PersistentSet<Cell<T>> = cells.filter { it.coord.column == column }
+        .toPersistentSet()
 
     private companion object {
         private fun <T> defaultCells() = (1..9).selfTensor()
             .map { Cell<T>(it) }
-            .toPersistentList()
+            .toPersistentSet()
     }
 }
 
