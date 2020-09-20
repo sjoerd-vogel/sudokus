@@ -6,7 +6,19 @@ class SquareNineBoard<T> private constructor(
 ) {
     constructor() : this(defaultCells())
 
-    override fun toString(): String = cells.joinToString("\n")
+    override fun toString(): String = cells
+        .sortedBy { it.coord.row }
+        .groupBy { it.coord.row }
+        .values
+        .map { row ->
+            row.sortedBy { it.coord.column }
+                .map { cell -> cell.state }
+                .joinToString(" | ", "| ", " |")
+        }.joinToString(
+            "\n-------------------------------------\n",
+            "-------------------------------------\n",
+            "\n-------------------------------------"
+        )
 
     val sectors: PersistentSet<Sector> = (1..3).selfTensor()
         .map { Coord(it) }
