@@ -1,4 +1,4 @@
-package com.vogel.sjoerd.sudokus.board
+package board
 
 data class Cell<T>(
     val coord: Coord,

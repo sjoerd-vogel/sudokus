@@ -1,4 +1,4 @@
-package com.vogel.sjoerd.sudokus.board
+package board
 
 interface State<T> {
     object Empty : State<Nothing> {

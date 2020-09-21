@@ -1,8 +1,8 @@
-package com.vogel.sjoerd.sudokus.classic.populate
+package classic.populate
 
-import com.vogel.sjoerd.sudokus.board.Board
-import com.vogel.sjoerd.sudokus.board.Sector
-import com.vogel.sjoerd.sudokus.board.State
+import board.Board
+import board.Sector
+import board.State
 
 internal fun <T> populateSector(board: Board<T>, sector: Sector, elements: Iterable<T>): Board<T> {
     tailrec fun worker(board: Board<T>): Board<T> {

@@ -1,4 +1,4 @@
-package com.vogel.sjoerd.sudokus.board
+package board
 
 data class Coord(val column: Int, val row: Int) {
 

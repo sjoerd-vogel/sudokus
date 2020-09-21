@@ -1,3 +1,3 @@
-package com.vogel.sjoerd.sudokus.classic.populate
+package classic.populate
 
 internal class RetryException : RuntimeException()

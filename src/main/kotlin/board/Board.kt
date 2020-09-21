@@ -1,4 +1,4 @@
-package com.vogel.sjoerd.sudokus.board
+package board
 
 //a classic 9x9, 3x3 sectored sudoku board
 data class Board<T>(

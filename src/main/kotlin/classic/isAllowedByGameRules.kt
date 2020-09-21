@@ -1,9 +1,9 @@
-package com.vogel.sjoerd.sudokus.classic
+package classic
 
-import com.vogel.sjoerd.sudokus.board.Board
-import com.vogel.sjoerd.sudokus.board.Cell
-import com.vogel.sjoerd.sudokus.board.Coord
-import com.vogel.sjoerd.sudokus.board.State
+import board.Board
+import board.Cell
+import board.Coord
+import board.State
 
 internal fun <T> isAllowedByGameRules(board: Board<T>, coord: Coord, element: T): Boolean =
     notInSameColumn(board, coord, element) &&

@@ -1,4 +1,4 @@
-package com.vogel.sjoerd.sudokus.board
+package board
 
 data class Sector(
     val coords: Iterable<Coord>

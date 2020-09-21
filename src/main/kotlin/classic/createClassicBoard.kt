@@ -1,9 +1,9 @@
-package com.vogel.sjoerd.sudokus.classic
+package classic
 
-import com.vogel.sjoerd.sudokus.board.Board
-import com.vogel.sjoerd.sudokus.board.Cell
-import com.vogel.sjoerd.sudokus.board.Coord
-import com.vogel.sjoerd.sudokus.board.Sector
+import board.Board
+import board.Cell
+import board.Coord
+import board.Sector
 
 //create a classic sudoku board
 internal fun <T> createClassicBoard(): Board<T> = Board(defaultSectors(), defaultCells())

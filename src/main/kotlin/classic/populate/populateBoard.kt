@@ -1,8 +1,8 @@
-package com.vogel.sjoerd.sudokus.classic.populate
+package classic.populate
 
-import com.vogel.sjoerd.sudokus.board.Board
-import com.vogel.sjoerd.sudokus.board.State
-import com.vogel.sjoerd.sudokus.classic.createClassicBoard
+import board.Board
+import board.State
+import classic.createClassicBoard
 
 //add elements to cells of classic board
 internal tailrec fun <T> populateBoard(elements: Iterable<T>): Board<T> {
