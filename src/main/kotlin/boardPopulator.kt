@@ -1,10 +1,9 @@
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.PersistentList as PList
 
 typealias Board = ClassicBoard<String>
 
 tailrec fun <T> getPopulatedBoard(elements: Iterable<T>): Board {
-    val set = elements.map { it.toString() }.toPersistentList()
+    val set = elements.map { it.toString() }()
     try {
         return _getPopulatedBoard(set)
     } catch (re: RetryException) {
@@ -23,20 +22,18 @@ private fun _getPopulatedBoard(elements: Iterable<String>): Board {
     return populateWorker()
 }
 
-private fun Iterable<Cell<String>>.values() =
+private fun <T> Iterable<Cell<T>>.values(): PList<T> =
     this.flatMap {
         if (it.state is State.Valued) listOf(it.state.value)
         else emptyList()
-    }
+    }()
 
-private fun filterElements(board: Board, elements: Iterable<String>): PersistentList<String> {
+private fun filterElements(board: Board, elements: Iterable<String>): PList<String> {
     val emptyCoords = board.getEmptyCells()
-        .map { it.coord }
-        .toPersistentList()
+        .map { it.coord }()
     return elements.filter { notInSameRow(board, emptyCoords[0], it) }
         .filter { notInSameColumn(board, emptyCoords[0], it) }
-        .filter { notInSameSector(board, emptyCoords[0], it) }
-        .toPersistentList()
+        .filter { notInSameSector(board, emptyCoords[0], it) }()
 }
 
 private fun addNextElement(board: Board, elements: Iterable<String>): Board {
@@ -46,20 +43,19 @@ private fun addNextElement(board: Board, elements: Iterable<String>): Board {
     return board.set(
         nextCoord,
         filterElements(board, elements)
-            .toPersistentList()
             .randomOrNull() ?: throw RetryException()
     )
 }
 
-private fun notInSameRow(board: Board, coord: Coord, element: String) = board.getRow(coord.row)
+private fun notInSameRow(board: Board, coord: Coord, element: String): Boolean = board.getRow(coord.row)
     .values()
     .none { it == element }
 
-private fun notInSameColumn(board: Board, coord: Coord, element: String) = board.getColumn(coord.column)
+private fun notInSameColumn(board: Board, coord: Coord, element: String): Boolean = board.getColumn(coord.column)
     .values()
     .none { it == element }
 
-private fun notInSameSector(board: Board, coord: Coord, element: String) = board.sectors
+private fun notInSameSector(board: Board, coord: Coord, element: String): Boolean = board.sectors
     .first { coord in it.coords }
     .coords
     .map { board.getCell(it) }

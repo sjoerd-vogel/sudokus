@@ -1,4 +1,4 @@
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.PersistentList as PList
 
 //a classic 9x9, 3x3 sectored sudoku board
 class ClassicBoard<T> private constructor(
@@ -20,50 +20,38 @@ class ClassicBoard<T> private constructor(
             "\n-------------------------------------"
         )
 
-    val sectors = (1..3).selfTensor()
+    val sectors: PList<Sector> = (1..3).selfTensor()
         .map { (column, row) -> Coord(column, row) }
         .map { sc ->
             Sector(
                 (1..3).selfTensor()
                     .map { (column, row) -> Coord(column, row) }
-                    .map { bc -> bc + (sc - Coord(1, 1)) * Coord(3, 3) }
-                    .toPersistentList()
+                    .map { bc -> bc + (sc - Coord(1, 1)) * Coord(3, 3) }()
             )
-        }
-        .toPersistentList()
+        }()
 
-    fun set(coord: Coord, value: T) = ClassicBoard(
+    fun set(coord: Coord, value: T): ClassicBoard<T> = ClassicBoard(
         cells.map {
             if (it.coord != coord) it
             else Cell(coord, State.Valued(value))
-        }.toPersistentList()
-    )
-
-    fun empty(coord: Coord) = ClassicBoard(
-        cells.map {
-            if (it.coord != coord) it
-            else Cell<T>(coord, State.Empty)
-        }
+        }()
     )
 
     fun getCell(coord: Coord): Cell<T> = cells.filter { it.coord == coord }
         .first()
 
-    fun getEmptyCells() = cells.flatMap {
+    fun getEmptyCells(): PList<Cell<T>> = cells.flatMap {
         if (it.state is State.Empty) listOf(it)
         else emptyList()
-    }.toPersistentList()
+    }()
 
-    fun getRow(row: Int) = cells.filter { it.coord.row == row }
-        .toPersistentList()
+    fun getRow(row: Int): PList<Cell<T>> = cells.filter { it.coord.row == row }()
 
-    fun getColumn(column: Int) = cells.filter { it.coord.column == column }
-        .toPersistentList()
+    fun getColumn(column: Int): PList<Cell<T>> = cells.filter { it.coord.column == column }()
 
     private companion object {
-        private fun <T> defaultCells() = (1..9).selfTensor()
-            .map { (column, row) -> Cell<T>(Coord(column, row)) }
-            .toPersistentList()
+        private fun <T> defaultCells(): PList<Cell<T>> = (1..9).selfTensor()
+            .map { (column, row) -> Cell<T>(Coord(column, row)) }()
     }
 }
 
