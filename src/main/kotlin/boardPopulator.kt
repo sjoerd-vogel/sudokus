@@ -60,8 +60,8 @@ private fun notInSameColumn(board: Board, coord: Coord, element: String) = board
     .none { it == element }
 
 private fun notInSameSector(board: Board, coord: Coord, element: String) = board.sectors
-    .first { coord in it.boardCoords }
-    .boardCoords
+    .first { coord in it.coords }
+    .coords
     .map { board.getCell(it) }
     .values()
     .none { it == element }

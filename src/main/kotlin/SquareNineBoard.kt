@@ -23,7 +23,6 @@ class SquareNineBoard<T> private constructor(
         .map { (column, row) -> Coord(column, row) }
         .map { sc ->
             Sector(
-                sc,
                 (1..3).selfTensor()
                     .map { (column, row) -> Coord(column, row) }
                     .map { bc -> bc + (sc - Coord(1, 1)) * Coord(3, 3) }
@@ -58,10 +57,6 @@ class SquareNineBoard<T> private constructor(
         .toPersistentList()
 
     fun getColumn(column: Int) = cells.filter { it.coord.column == column }
-        .toPersistentList()
-
-    fun getSector(coord: Coord) = sectors.filter { it.sectorCoord == coord }
-        .map { sec -> cells.filter { cell -> cell.coord in sec.boardCoords } }
         .toPersistentList()
 
     private companion object {
