@@ -3,7 +3,6 @@ package com.vogel.sjoerd.sudokus.classic.populate
 import com.vogel.sjoerd.sudokus.board.Board
 import com.vogel.sjoerd.sudokus.board.Sector
 import com.vogel.sjoerd.sudokus.board.State
-import com.vogel.sjoerd.sudokus.board.Extensions.getCellsBySector
 
 internal object PopulateSector {
     internal operator fun <T> invoke(board: Board<T>, sector: Sector, elements: Iterable<T>): Board<T> {
@@ -16,4 +15,8 @@ internal object PopulateSector {
         }
         return worker(board)
     }
+
+    private fun <T> Board<T>.getCellsBySector(sector: Sector) = cells
+        .filter { it.coord in sector.coords }
+
 }

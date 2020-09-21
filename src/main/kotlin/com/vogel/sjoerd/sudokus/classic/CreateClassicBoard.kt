@@ -4,7 +4,6 @@ import com.vogel.sjoerd.sudokus.board.Board
 import com.vogel.sjoerd.sudokus.board.Cell
 import com.vogel.sjoerd.sudokus.board.Coord
 import com.vogel.sjoerd.sudokus.board.Sector
-import com.vogel.sjoerd.sudokus.Extensions.selfTensor
 
 //create a classic sudoku board
 internal object CreateClassicBoard {
@@ -22,4 +21,10 @@ internal object CreateClassicBoard {
                     .map { bc -> bc + (sc - Coord(1, 1)) * Coord(3, 3) }
             )
         }
+
+    private fun <T, U> Iterable<T>.tensor(that: Iterable<U>): Iterable<Pair<T, U>> = flatMap { thisItem ->
+        that.map { thatItem -> Pair(thisItem, thatItem) }
+    }
+
+    private fun <T> Iterable<T>.selfTensor(): Iterable<Pair<T, T>> = tensor(this)
 }

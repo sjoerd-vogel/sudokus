@@ -1,7 +1,8 @@
 package com.vogel.sjoerd.sudokus.classic.populate
 
 import com.vogel.sjoerd.sudokus.board.Board
-import com.vogel.sjoerd.sudokus.board.Extensions.getUnfilledSectors
+import com.vogel.sjoerd.sudokus.board.Sector
+import com.vogel.sjoerd.sudokus.board.State
 import com.vogel.sjoerd.sudokus.classic.CreateClassicBoard
 
 internal object PopulateBoard {
@@ -23,5 +24,11 @@ internal object PopulateBoard {
             else worker(PopulateSector(board, empties.first(), elements))
         }
         return worker()
+    }
+
+    private fun <T> Board<T>.getUnfilledSectors() = sectors.filter { sec ->
+        sec.coords.any { secc ->
+            cells.any { cel -> cel.state == State.Empty && cel.coord == secc }
+        }
     }
 }
