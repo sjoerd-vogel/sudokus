@@ -43,13 +43,31 @@ fun filterElements(board: Board, elements: PersistentSet<String>): PersistentSet
         .toPersistentSet()
 }
 
+fun elementDoesNotBlock(board: Board, element: String, elements: PersistentSet<String>): Boolean {
+    val emptyCoords = board.getEmptyCells()
+        .map { it.coord }
+        .toPersistentList()
+    if (emptyCoords.size < 2) return true
+    val boardCandidate: Board = board.set(
+        emptyCoords[0],
+        element
+    )
+    return elements.filter { notInSameRow(boardCandidate, emptyCoords[1], it) }
+        .filter { notInSameColumn(boardCandidate, emptyCoords[1], it) }
+        .filter { notInSameSector(boardCandidate, emptyCoords[1], it) }
+        .isNotEmpty()
+}
+
+
 fun addNextElement(board: Board, elements: PersistentSet<String>): Board {
     val nextCoord = board.getEmptyCells()
         .first()
         .coord
     return board.set(
         nextCoord,
-        filterElements(board, elements).randomOrNull() ?: throw RetryException()
+        filterElements(board, elements)
+            .filter { elementDoesNotBlock(board, it, elements) }
+            .randomOrNull() ?: throw RetryException()
     )
 }
 
@@ -68,4 +86,4 @@ fun notInSameSector(board: Board, coord: Coord, element: String) = board.sectors
     .values()
     .none { it == element }
 
-class RetryException() : RuntimeException()
+class RetryException : RuntimeException()
