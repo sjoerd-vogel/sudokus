@@ -1,5 +1,5 @@
 package com.vogel.sjoerd.sudokus
 
-import com.vogel.sjoerd.sudokus.classic.populate.PopulateBoard
+import com.vogel.sjoerd.sudokus.classic.populate.populateBoard
 
-fun main() = println(PopulateBoard(1..9))
+fun main() = println(populateBoard(1..9))
