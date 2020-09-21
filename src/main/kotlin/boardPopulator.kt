@@ -11,34 +11,40 @@ tailrec fun <T> getPopulatedBoard(elements: Iterable<T>): Board {
 
 private fun _getPopulatedBoard(elements: Iterable<String>): Board {
 
-    tailrec fun populateWorker(board: Board = Board()): Board {
-        val empties = board.getEmptyCells()
+    tailrec fun worker(board: Board = Board()): Board {
+        val empties = board.getUnfilledSectors()
 
         return if (empties.none()) board
-        else populateWorker(addNextElement(board, elements))
+        else worker(fillSector(board, empties.first(), elements))
     }
-    return populateWorker()
+    return worker()
+}
+
+private fun fillSector(board: Board, sector: Sector, elements: Iterable<String>): Board {
+    tailrec fun worker(board: Board): Board {
+        val empties = board.getCellsBySector(sector)
+            .filter { it.state == State.Empty }
+
+        return if (empties.none()) board
+        else worker(addElement(board, empties.first().coord, elements))
+    }
+    return worker(board)
 }
 
 private fun <T> Iterable<Cell<T>>.values(): Iterable<T> = this.mapNotNull {
     if (it.state is State.Valued) it.state.value else null
 }
 
-private fun filterElements(board: Board, elements: Iterable<String>): Iterable<String> {
-    val emptyCoords = board.getEmptyCells()
-        .map { it.coord }
-    return elements.filter { notInSameRow(board, emptyCoords[0], it) }
-        .filter { notInSameColumn(board, emptyCoords[0], it) }
-        .filter { notInSameSector(board, emptyCoords[0], it) }
+private fun filterElements(board: Board, coord: Coord, elements: Iterable<String>): Iterable<String> {
+    return elements.filter { notInSameRow(board, coord, it) }
+        .filter { notInSameColumn(board, coord, it) }
+        .filter { notInSameSector(board, coord, it) }
 }
 
-private fun addNextElement(board: Board, elements: Iterable<String>): Board {
-    val nextCoord = board.getEmptyCells()
-        .first()
-        .coord
+private fun addElement(board: Board, coord: Coord, elements: Iterable<String>): Board {
     return board.set(
-        nextCoord,
-        filterElements(board, elements).toList()
+        coord,
+        filterElements(board, coord, elements).toList()
             .randomOrNull() ?: throw RetryException()
     )
 }

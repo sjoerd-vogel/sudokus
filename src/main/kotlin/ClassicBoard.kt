@@ -37,7 +37,13 @@ class ClassicBoard<T> private constructor(
 
     fun getCell(coord: Coord): Cell<T> = cells.filter { it.coord == coord }.first()
 
-    fun getEmptyCells(): Iterable<Cell<T>> = cells.filter { it.state is State.Empty }
+    fun getCellsBySector(sector: Sector) = cells.filter { it.coord in sector.coords }
+
+    fun getUnfilledSectors() = sectors.filter { sec ->
+        sec.coords.any { secc ->
+            cells.any { cel -> cel.state == State.Empty && cel.coord == secc }
+        }
+    }
 
     fun getRow(row: Int): Iterable<Cell<T>> = cells.filter { it.coord.row == row }
 
