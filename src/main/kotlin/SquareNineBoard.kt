@@ -1,10 +1,8 @@
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.collections.immutable.toPersistentSet
 
 class SquareNineBoard<T> private constructor(
-    val cells: PersistentSet<Cell<T>>
+    val cells: PersistentList<Cell<T>>
 ) {
     constructor() : this(defaultCells())
 
@@ -22,7 +20,7 @@ class SquareNineBoard<T> private constructor(
             "\n-------------------------------------"
         )
 
-    val sectors: PersistentSet<Sector> = (1..3).selfTensor()
+    val sectors: PersistentList<Sector> = (1..3).selfTensor()
         .map { (column, row) -> Coord(column, row) }
         .map { sc ->
             Sector(
@@ -30,23 +28,23 @@ class SquareNineBoard<T> private constructor(
                 (1..3).selfTensor()
                     .map { (column, row) -> Coord(column, row) }
                     .map { bc -> bc + (sc - Coord(1, 1)) * Coord(3, 3) }
-                    .toPersistentSet()
+                    .toPersistentList()
             )
         }
-        .toPersistentSet()
+        .toPersistentList()
 
     fun set(coord: Coord, value: T) = SquareNineBoard(
         cells.map {
             if (it.coord != coord) it
             else Cell(coord, State.Valued(value))
-        }.toPersistentSet()
+        }.toPersistentList()
     )
 
     fun empty(coord: Coord) = SquareNineBoard(
         cells.map {
             if (it.coord != coord) it
             else Cell<T>(coord, State.Empty)
-        }.toPersistentSet()
+        }.toPersistentList()
     )
 
     fun getCell(coord: Coord): Cell<T> = cells.filter { it.coord == coord }
@@ -57,20 +55,20 @@ class SquareNineBoard<T> private constructor(
         else emptyList()
     }.toPersistentList()
 
-    fun getRow(row: Int): PersistentSet<Cell<T>> = cells.filter { it.coord.row == row }
-        .toPersistentSet()
+    fun getRow(row: Int): PersistentList<Cell<T>> = cells.filter { it.coord.row == row }
+        .toPersistentList()
 
-    fun getColumn(column: Int): PersistentSet<Cell<T>> = cells.filter { it.coord.column == column }
-        .toPersistentSet()
+    fun getColumn(column: Int): PersistentList<Cell<T>> = cells.filter { it.coord.column == column }
+        .toPersistentList()
 
     fun getSector(coord: Coord) = sectors.filter { it.sectorCoord == coord }
         .map { sec -> cells.filter { cell -> cell.coord in sec.boardCoords } }
-        .toPersistentSet()
+        .toPersistentList()
 
     private companion object {
         private fun <T> defaultCells() = (1..9).selfTensor()
             .map { (column, row) -> Cell<T>(Coord(column, row)) }
-            .toPersistentSet()
+            .toPersistentList()
     }
 }
 
