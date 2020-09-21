@@ -1,9 +1,5 @@
-import kotlinx.collections.immutable.toPersistentList
+fun <T, U> Iterable<T>.tensor(that: Iterable<U>): Iterable<Pair<T, U>> =
+    this.flatMap { thisItem -> that.map { thatItem -> Pair(thisItem, thatItem) } }
 
-fun <T, U> Iterable<T>.tensor(that: Iterable<U>) =
-    this.flatMap { thisItem -> that.map { thatItem -> Pair(thisItem, thatItem) } }()
-
-fun <T> Iterable<T>.selfTensor() =
+fun <T> Iterable<T>.selfTensor(): Iterable<Pair<T, T>> =
     this.tensor(this)
-
-operator fun <T> Iterable<T>.invoke() = this.toPersistentList()

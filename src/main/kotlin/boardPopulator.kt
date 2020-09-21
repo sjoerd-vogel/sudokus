@@ -1,9 +1,7 @@
-import kotlinx.collections.immutable.PersistentList as PList
-
 typealias Board = ClassicBoard<String>
 
 tailrec fun <T> getPopulatedBoard(elements: Iterable<T>): Board {
-    val set = elements.map { it.toString() }()
+    val set = elements.map { it.toString() }
     try {
         return _getPopulatedBoard(set)
     } catch (re: RetryException) {
@@ -16,24 +14,24 @@ private fun _getPopulatedBoard(elements: Iterable<String>): Board {
     tailrec fun populateWorker(board: Board = Board()): Board {
         val empties = board.getEmptyCells()
 
-        return if (empties.isEmpty()) board
+        return if (empties.none()) board
         else populateWorker(addNextElement(board, elements))
     }
     return populateWorker()
 }
 
-private fun <T> Iterable<Cell<T>>.values(): PList<T> =
+private fun <T> Iterable<Cell<T>>.values(): Iterable<T> =
     this.flatMap {
         if (it.state is State.Valued) listOf(it.state.value)
         else emptyList()
-    }()
+    }
 
-private fun filterElements(board: Board, elements: Iterable<String>): PList<String> {
+private fun filterElements(board: Board, elements: Iterable<String>): Iterable<String> {
     val emptyCoords = board.getEmptyCells()
-        .map { it.coord }()
+        .map { it.coord }
     return elements.filter { notInSameRow(board, emptyCoords[0], it) }
         .filter { notInSameColumn(board, emptyCoords[0], it) }
-        .filter { notInSameSector(board, emptyCoords[0], it) }()
+        .filter { notInSameSector(board, emptyCoords[0], it) }
 }
 
 private fun addNextElement(board: Board, elements: Iterable<String>): Board {
@@ -42,7 +40,7 @@ private fun addNextElement(board: Board, elements: Iterable<String>): Board {
         .coord
     return board.set(
         nextCoord,
-        filterElements(board, elements)
+        filterElements(board, elements).toList()
             .randomOrNull() ?: throw RetryException()
     )
 }
