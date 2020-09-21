@@ -1,6 +1,7 @@
 import kotlinx.collections.immutable.toPersistentList
 
-class SquareNineBoard<T> private constructor(
+//a classic 9x9, 3x3 sectored sudoku board
+class ClassicBoard<T> private constructor(
     val cells: Iterable<Cell<T>>
 ) {
     constructor() : this(defaultCells())
@@ -31,14 +32,14 @@ class SquareNineBoard<T> private constructor(
         }
         .toPersistentList()
 
-    fun set(coord: Coord, value: T) = SquareNineBoard(
+    fun set(coord: Coord, value: T) = ClassicBoard(
         cells.map {
             if (it.coord != coord) it
             else Cell(coord, State.Valued(value))
         }.toPersistentList()
     )
 
-    fun empty(coord: Coord) = SquareNineBoard(
+    fun empty(coord: Coord) = ClassicBoard(
         cells.map {
             if (it.coord != coord) it
             else Cell<T>(coord, State.Empty)

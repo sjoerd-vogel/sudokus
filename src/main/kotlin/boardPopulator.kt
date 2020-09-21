@@ -1,7 +1,7 @@
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
-typealias Board = SquareNineBoard<String>
+typealias Board = ClassicBoard<String>
 
 tailrec fun <T> getPopulatedBoard(elements: Iterable<T>): Board {
     val set = elements.map { it.toString() }.toPersistentList()
