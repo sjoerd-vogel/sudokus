@@ -23,12 +23,12 @@ class SquareNineBoard<T> private constructor(
         )
 
     val sectors: PersistentSet<Sector> = (1..3).selfTensor()
-        .map { Coord(it) }
+        .map { (column, row) -> Coord(column, row) }
         .map { sc ->
             Sector(
                 sc,
                 (1..3).selfTensor()
-                    .map { bc -> Coord(bc) }
+                    .map { (column, row) -> Coord(column, row) }
                     .map { bc -> bc + (sc - Coord(1, 1)) * Coord(3, 3) }
                     .toPersistentSet()
             )
@@ -69,7 +69,7 @@ class SquareNineBoard<T> private constructor(
 
     private companion object {
         private fun <T> defaultCells() = (1..9).selfTensor()
-            .map { Cell<T>(it) }
+            .map { (column, row) -> Cell<T>(Coord(column, row)) }
             .toPersistentSet()
     }
 }
