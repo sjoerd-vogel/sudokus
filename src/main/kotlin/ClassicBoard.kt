@@ -46,7 +46,7 @@ class ClassicBoard<T> private constructor(
 
     private companion object {
         private fun <T> defaultCells(): Iterable<Cell<T>> = (1..9).selfTensor()
-            .map { (column, row) -> Cell<T>(Coord(column, row)) }
+            .map { (column, row) -> Cell(Coord(column, row)) }
     }
 }
 
