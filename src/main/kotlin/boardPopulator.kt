@@ -1,3 +1,4 @@
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 typealias Board = SquareNineBoard<String>
@@ -28,7 +29,7 @@ private fun Iterable<Cell<String>>.values() =
         else emptyList()
     }
 
-fun filterElements(board: Board, elements: Iterable<String>): Iterable<String> {
+fun filterElements(board: Board, elements: Iterable<String>): PersistentList<String> {
     val emptyCoords = board.getEmptyCells()
         .map { it.coord }
         .toPersistentList()
@@ -38,22 +39,6 @@ fun filterElements(board: Board, elements: Iterable<String>): Iterable<String> {
         .toPersistentList()
 }
 
-fun elementDoesNotBlock(board: Board, element: String, elements: Iterable<String>): Boolean {
-    val emptyCoords = board.getEmptyCells()
-        .map { it.coord }
-        .toPersistentList()
-    if (emptyCoords.size < 2) return true
-    val boardCandidate: Board = board.set(
-        emptyCoords[0],
-        element
-    )
-    return elements.filter { notInSameRow(boardCandidate, emptyCoords[1], it) }
-        .filter { notInSameColumn(boardCandidate, emptyCoords[1], it) }
-        .filter { notInSameSector(boardCandidate, emptyCoords[1], it) }
-        .isNotEmpty()
-}
-
-
 fun addNextElement(board: Board, elements: Iterable<String>): Board {
     val nextCoord = board.getEmptyCells()
         .first()
@@ -61,7 +46,7 @@ fun addNextElement(board: Board, elements: Iterable<String>): Board {
     return board.set(
         nextCoord,
         filterElements(board, elements)
-            .filter { elementDoesNotBlock(board, it, elements) }
+            .toPersistentList()
             .randomOrNull() ?: throw RetryException()
     )
 }
