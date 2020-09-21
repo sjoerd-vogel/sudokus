@@ -1,4 +1,6 @@
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.PersistentSet
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentSet
 
 class SquareNineBoard<T> private constructor(
@@ -49,6 +51,11 @@ class SquareNineBoard<T> private constructor(
 
     fun getCell(coord: Coord): Cell<T> = cells.filter { it.coord == coord }
         .first()
+
+    fun getEmptyCells(): PersistentList<Cell<T>> = cells.flatMap {
+        if (it.state is State.Empty) listOf(it)
+        else emptyList()
+    }.toPersistentList()
 
     fun getRow(row: Int): PersistentSet<Cell<T>> = cells.filter { it.coord.row == row }
         .toPersistentSet()
