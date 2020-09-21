@@ -33,16 +33,23 @@ private fun Iterable<Cell<String>>.values() =
         else emptyList()
     }
 
-fun addNextElement(board: Board, elements: PersistentSet<String>): Board {
+fun filterElements(board: Board, elements: PersistentSet<String>): PersistentSet<String> {
     val emptyCoords = board.getEmptyCells()
         .map { it.coord }
         .toPersistentList()
+    return elements.filter { notInSameRow(board, emptyCoords[0], it) }
+        .filter { notInSameColumn(board, emptyCoords[0], it) }
+        .filter { notInSameSector(board, emptyCoords[0], it) }
+        .toPersistentSet()
+}
+
+fun addNextElement(board: Board, elements: PersistentSet<String>): Board {
+    val nextCoord = board.getEmptyCells()
+        .first()
+        .coord
     return board.set(
-        emptyCoords[0],
-        elements.filter { notInSameRow(board, emptyCoords[0], it) }
-            .filter { notInSameColumn(board, emptyCoords[0], it) }
-            .filter { notInSameSector(board, emptyCoords[0], it) }
-            .randomOrNull() ?: throw RetryException()
+        nextCoord,
+        filterElements(board, elements).randomOrNull() ?: throw RetryException()
     )
 }
 
