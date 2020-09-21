@@ -29,7 +29,7 @@ private fun Iterable<Cell<String>>.values() =
         else emptyList()
     }
 
-fun filterElements(board: Board, elements: Iterable<String>): PersistentList<String> {
+private fun filterElements(board: Board, elements: Iterable<String>): PersistentList<String> {
     val emptyCoords = board.getEmptyCells()
         .map { it.coord }
         .toPersistentList()
@@ -39,7 +39,7 @@ fun filterElements(board: Board, elements: Iterable<String>): PersistentList<Str
         .toPersistentList()
 }
 
-fun addNextElement(board: Board, elements: Iterable<String>): Board {
+private fun addNextElement(board: Board, elements: Iterable<String>): Board {
     val nextCoord = board.getEmptyCells()
         .first()
         .coord
@@ -51,19 +51,19 @@ fun addNextElement(board: Board, elements: Iterable<String>): Board {
     )
 }
 
-fun notInSameRow(board: Board, coord: Coord, element: String) = board.getRow(coord.row)
+private fun notInSameRow(board: Board, coord: Coord, element: String) = board.getRow(coord.row)
     .values()
     .none { it == element }
 
-fun notInSameColumn(board: Board, coord: Coord, element: String) = board.getColumn(coord.column)
+private fun notInSameColumn(board: Board, coord: Coord, element: String) = board.getColumn(coord.column)
     .values()
     .none { it == element }
 
-fun notInSameSector(board: Board, coord: Coord, element: String) = board.sectors
+private fun notInSameSector(board: Board, coord: Coord, element: String) = board.sectors
     .first { coord in it.boardCoords }
     .boardCoords
     .map { board.getCell(it) }
     .values()
     .none { it == element }
 
-class RetryException : RuntimeException()
+private class RetryException : RuntimeException()
