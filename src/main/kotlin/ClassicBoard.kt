@@ -38,10 +38,7 @@ class ClassicBoard<T> private constructor(
     fun getCell(coord: Coord): Cell<T> = cells.filter { it.coord == coord }
         .first()
 
-    fun getEmptyCells(): Iterable<Cell<T>> = cells.flatMap {
-        if (it.state is State.Empty) listOf(it)
-        else emptyList()
-    }
+    fun getEmptyCells(): Iterable<Cell<T>> = cells.filter { it.state is State.Empty }
 
     fun getRow(row: Int): Iterable<Cell<T>> = cells.filter { it.coord.row == row }
 

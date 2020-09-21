@@ -20,11 +20,9 @@ private fun _getPopulatedBoard(elements: Iterable<String>): Board {
     return populateWorker()
 }
 
-private fun <T> Iterable<Cell<T>>.values(): Iterable<T> =
-    this.flatMap {
-        if (it.state is State.Valued) listOf(it.state.value)
-        else emptyList()
-    }
+private fun <T> Iterable<Cell<T>>.values(): Iterable<T> = this.mapNotNull {
+    if (it.state is State.Valued) it.state.value else null
+}
 
 private fun filterElements(board: Board, elements: Iterable<String>): Iterable<String> {
     val emptyCoords = board.getEmptyCells()
