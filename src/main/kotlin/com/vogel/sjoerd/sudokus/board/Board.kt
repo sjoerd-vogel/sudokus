@@ -1,5 +1,7 @@
+package com.vogel.sjoerd.sudokus.board
+
 //a classic 9x9, 3x3 sectored sudoku board
-data class Board<T> (
+data class Board<T>(
     val sectors: Iterable<Sector>,
     val cells: Iterable<Cell<T>>
 ) {

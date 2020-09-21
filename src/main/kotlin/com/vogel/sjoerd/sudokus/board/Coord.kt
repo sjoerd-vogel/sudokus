@@ -1,3 +1,5 @@
+package com.vogel.sjoerd.sudokus.board
+
 data class Coord(val column: Int, val row: Int) {
 
     operator fun plus(other: Coord) = Coord(

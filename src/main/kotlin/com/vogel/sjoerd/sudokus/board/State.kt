@@ -1,3 +1,5 @@
+package com.vogel.sjoerd.sudokus.board
+
 interface State<T> {
     object Empty : State<Nothing> {
         override fun toString(): String = " "
