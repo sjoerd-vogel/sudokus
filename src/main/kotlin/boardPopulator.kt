@@ -1,12 +1,8 @@
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 typealias Board = SquareNineBoard<String>
 
-fun <T> getPopulatedBoard(iterable: Iterable<T>): Board =
-    getPopulatedBoard(iterable.toPersistentList())
-
-tailrec fun <T> getPopulatedBoard(elements: PersistentList<T>): Board {
+tailrec fun <T> getPopulatedBoard(elements: Iterable<T>): Board {
     val set = elements.map { it.toString() }.toPersistentList()
     try {
         return _getPopulatedBoard(set)
@@ -15,7 +11,7 @@ tailrec fun <T> getPopulatedBoard(elements: PersistentList<T>): Board {
     return getPopulatedBoard(set)
 }
 
-private fun _getPopulatedBoard(elements: PersistentList<String>): Board {
+private fun _getPopulatedBoard(elements: Iterable<String>): Board {
 
     tailrec fun populateWorker(board: Board = Board()): Board {
         val empties = board.getEmptyCells()
@@ -32,7 +28,7 @@ private fun Iterable<Cell<String>>.values() =
         else emptyList()
     }
 
-fun filterElements(board: Board, elements: PersistentList<String>): PersistentList<String> {
+fun filterElements(board: Board, elements: Iterable<String>): Iterable<String> {
     val emptyCoords = board.getEmptyCells()
         .map { it.coord }
         .toPersistentList()
@@ -42,7 +38,7 @@ fun filterElements(board: Board, elements: PersistentList<String>): PersistentLi
         .toPersistentList()
 }
 
-fun elementDoesNotBlock(board: Board, element: String, elements: PersistentList<String>): Boolean {
+fun elementDoesNotBlock(board: Board, element: String, elements: Iterable<String>): Boolean {
     val emptyCoords = board.getEmptyCells()
         .map { it.coord }
         .toPersistentList()
@@ -58,7 +54,7 @@ fun elementDoesNotBlock(board: Board, element: String, elements: PersistentList<
 }
 
 
-fun addNextElement(board: Board, elements: PersistentList<String>): Board {
+fun addNextElement(board: Board, elements: Iterable<String>): Board {
     val nextCoord = board.getEmptyCells()
         .first()
         .coord

@@ -1,8 +1,6 @@
-import kotlinx.collections.immutable.PersistentList
-
 data class Sector(
     val sectorCoord: Coord,
-    val boardCoords: PersistentList<Coord>
+    val boardCoords: Iterable<Coord>
 ) {
     override fun toString(): String = "${sectorCoord} -> [${boardCoords.joinToString(", ")}]"
 }

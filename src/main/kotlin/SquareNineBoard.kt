@@ -1,8 +1,7 @@
-import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 class SquareNineBoard<T> private constructor(
-    val cells: PersistentList<Cell<T>>
+    val cells: Iterable<Cell<T>>
 ) {
     constructor() : this(defaultCells())
 
@@ -20,7 +19,7 @@ class SquareNineBoard<T> private constructor(
             "\n-------------------------------------"
         )
 
-    val sectors: PersistentList<Sector> = (1..3).selfTensor()
+    val sectors = (1..3).selfTensor()
         .map { (column, row) -> Coord(column, row) }
         .map { sc ->
             Sector(
@@ -44,21 +43,21 @@ class SquareNineBoard<T> private constructor(
         cells.map {
             if (it.coord != coord) it
             else Cell<T>(coord, State.Empty)
-        }.toPersistentList()
+        }
     )
 
     fun getCell(coord: Coord): Cell<T> = cells.filter { it.coord == coord }
         .first()
 
-    fun getEmptyCells(): PersistentList<Cell<T>> = cells.flatMap {
+    fun getEmptyCells() = cells.flatMap {
         if (it.state is State.Empty) listOf(it)
         else emptyList()
     }.toPersistentList()
 
-    fun getRow(row: Int): PersistentList<Cell<T>> = cells.filter { it.coord.row == row }
+    fun getRow(row: Int) = cells.filter { it.coord.row == row }
         .toPersistentList()
 
-    fun getColumn(column: Int): PersistentList<Cell<T>> = cells.filter { it.coord.column == column }
+    fun getColumn(column: Int) = cells.filter { it.coord.column == column }
         .toPersistentList()
 
     fun getSector(coord: Coord) = sectors.filter { it.sectorCoord == coord }
