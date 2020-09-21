@@ -9,6 +9,7 @@ internal tailrec fun <T> populateBoard(elements: Iterable<T>): Board<T> {
     try {
         return fillSectors(createClassicBoard(), elements)
     } catch (re: RetryException) {
+        re //breakpoint helper
     }
     return populateBoard(elements)
 }

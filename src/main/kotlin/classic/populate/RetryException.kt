@@ -1,3 +1,5 @@
 package classic.populate
 
-internal class RetryException : RuntimeException()
+import board.Board
+
+internal class RetryException(val board: Board<*>) : RuntimeException()

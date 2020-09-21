@@ -8,6 +8,6 @@ internal fun <T> placeElement(board: Board<T>, coord: Coord, elements: Iterable<
     return board.set(
         coord,
         elements.filter { isAllowedByGameRules(board, coord, it) }
-            .randomOrNull() ?: throw RetryException()
+            .randomOrNull() ?: throw RetryException(board)
     )
 }
