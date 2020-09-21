@@ -1,17 +1,15 @@
-typealias Board = ClassicBoard<String>
-
-tailrec fun <T> getPopulatedBoard(elements: Iterable<T>): Board {
-    val set = elements.map { it.toString() }
+//add elements to cells of classic board
+tailrec fun <T> getPopulatedBoard(elements: Iterable<T>): Board<T> {
     try {
-        return _getPopulatedBoard(set)
+        return _getPopulatedBoard(elements)
     } catch (re: RetryException) {
     }
-    return getPopulatedBoard(set)
+    return getPopulatedBoard(elements)
 }
 
-private fun _getPopulatedBoard(elements: Iterable<String>): Board {
+private fun <T> _getPopulatedBoard(elements: Iterable<T>): Board<T> {
 
-    tailrec fun worker(board: Board = Board()): Board {
+    tailrec fun worker(board: Board<T> = createClassicBoard()): Board<T> {
         val empties = board.getUnfilledSectors()
 
         return if (empties.none()) board
@@ -20,8 +18,8 @@ private fun _getPopulatedBoard(elements: Iterable<String>): Board {
     return worker()
 }
 
-private fun fillSector(board: Board, sector: Sector, elements: Iterable<String>): Board {
-    tailrec fun worker(board: Board): Board {
+private fun <T> fillSector(board: Board<T>, sector: Sector, elements: Iterable<T>): Board<T> {
+    tailrec fun worker(board: Board<T>): Board<T> {
         val empties = board.getCellsBySector(sector)
             .filter { it.state == State.Empty }
 
@@ -31,7 +29,7 @@ private fun fillSector(board: Board, sector: Sector, elements: Iterable<String>)
     return worker(board)
 }
 
-private fun addElement(board: Board, coord: Coord, elements: Iterable<String>): Board {
+private fun <T> addElement(board: Board<T>, coord: Coord, elements: Iterable<T>): Board<T> {
     return board.set(
         coord,
         elements.filter { allowed(board, coord, it) }
