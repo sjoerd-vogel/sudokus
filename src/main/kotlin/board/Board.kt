@@ -27,5 +27,10 @@ data class Board<T>(
         }
     )
 
+    companion object {
+        fun <T> Board<T>.getCellsBySector(sector: Sector) = cells
+            .filter { it.coord in sector.coords }
+    }
+
 }
 

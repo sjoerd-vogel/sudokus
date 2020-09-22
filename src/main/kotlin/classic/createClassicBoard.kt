@@ -4,6 +4,7 @@ import board.Board
 import board.Cell
 import board.Coord
 import board.Sector
+import selfTensor
 
 //create a classic sudoku board
 internal fun <T> createClassicBoard(): Board<T> = Board(defaultSectors(), defaultCells())
@@ -21,8 +22,3 @@ private fun defaultSectors(): Iterable<Sector> = (1..3).selfTensor()
         )
     }
 
-private fun <T, U> Iterable<T>.tensor(that: Iterable<U>): Iterable<Pair<T, U>> = flatMap { thisItem ->
-    that.map { thatItem -> Pair(thisItem, thatItem) }
-}
-
-private fun <T> Iterable<T>.selfTensor(): Iterable<Pair<T, T>> = tensor(this)

@@ -1,6 +1,7 @@
 package classic.populate
 
 import board.Board
+import board.Board.Companion.getCellsBySector
 import board.Sector
 import board.State
 
@@ -15,5 +16,3 @@ internal fun <T> populateSector(board: Board<T>, sector: Sector, elements: Itera
     return worker(board)
 }
 
-private fun <T> Board<T>.getCellsBySector(sector: Sector) = cells
-    .filter { it.coord in sector.coords }
