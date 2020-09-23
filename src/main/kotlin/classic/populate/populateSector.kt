@@ -11,7 +11,7 @@ internal fun <T> populateSector(board: Board<T>, sector: Sector, elements: Itera
             .filter { it.state == State.Empty }
 
         return if (empties.none()) board
-        else worker(placeElement(board, empties.first().coord, elements))
+        else worker(placeElement(board, sector, empties.first().coord, elements))
     }
     return worker(board)
 }
