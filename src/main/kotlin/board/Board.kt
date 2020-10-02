@@ -27,6 +27,14 @@ data class Board<T>(
         }
     )
 
+    fun set(cell: Cell<T>): Board<T> = Board(
+        sectors,
+        cells.map {
+            if (it.coord != cell.coord) it
+            else cell
+        }
+    )
+
     companion object {
         fun <T> Board<T>.getCellsBySector(sector: Sector) = cells
             .filter { it.coord in sector.coords }
