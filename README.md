@@ -1,0 +1,1 @@
+This is an attempt at writing a sudoku generator. It is currently a work in progress. For now this project uses apache maven, this will probably change to gradle at some point. This project is currently very volatile and may break at any moment, please dont use as a dependency.
