@@ -33,7 +33,7 @@ class SectorCompatible {
         "-------------------------------------",
         "|   |   |   |   |   |   |   |   |   |",
         "-------------------------------------"
-    ).joinToString("", "", "")
+    )
 
     private val verGood = createClassicBoard<String>()
         .set(Coord(1, 1), "1").set(Coord(2, 1), "4")
