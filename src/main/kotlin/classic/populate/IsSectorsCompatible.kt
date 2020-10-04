@@ -5,8 +5,8 @@ import board.Board.Companion.getCellsBySector
 import board.Coord
 import board.Sector
 import board.State
-import selfTensor
-import tensor
+import external.iterable.selfTensor
+import external.iterable.tensor
 
 fun <T> sectorCompatible(board: Board<T>, coord: Coord, sector: Sector, value: T): Boolean {
     val updated = board.set(coord, value)

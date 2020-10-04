@@ -4,7 +4,7 @@ import board.Board
 import board.Cell
 import board.Coord
 import board.Sector
-import selfTensor
+import external.iterable.selfTensor
 
 //create a classic sudoku board
 fun <T> createClassicBoard(): Board<T> = Board(defaultSectors(), defaultCells())
