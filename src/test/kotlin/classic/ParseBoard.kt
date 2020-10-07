@@ -7,10 +7,12 @@ import board.State
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-private fun Iterable<String>.parse() = joinToString("", "", "")
+fun Iterable<String>.parse() = joinToString("", "", "")
+    .parse()
+fun Array<String>.parse() = joinToString("", "", "")
     .parse()
 
-private fun String.parse(): Board<String> =
+fun String.parse(): Board<String> =
     replace("\n", "")
         .replace("-", "")
         .replace("||", "|")

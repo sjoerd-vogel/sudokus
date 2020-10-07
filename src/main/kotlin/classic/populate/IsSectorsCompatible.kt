@@ -1,92 +1,34 @@
 package classic.populate
 
 import board.Board
-import board.Board.Companion.getCellsBySector
 import board.Coord
 import board.Sector
 import board.State
-import external.iterable.selfTensor
 import external.iterable.tensor
 
-fun <T> sectorCompatible(board: Board<T>, coord: Coord, sector: Sector, value: T): Boolean {
-    val updated = board.set(coord, value)
-    return updated.sameRowSectors(sector).none { areSectorsHorizontalCompatible(updated, sector, it) } &&
-            updated.sameColumnSectors(sector).none { areSectorsVerticalCompatible(updated, sector, it) }
-}
+fun <T> sectorCompatible(board: Board<T>): Boolean = true
 
-internal fun <T> areSectorsHorizontalCompatible(board: Board<T>, first: Sector, second: Sector): Boolean {
-    val joinedFirstRowPairs = board.getCellsBySector(first)
-        .groupBy { it.coord.row }
-        .values
-        .map { row ->
-            row.mapNotNull { cell ->
-                if (cell.state is State.Valued) cell.state.value
-                else null
-            }
-        }.selfTensor()
-        .filterNot { (first, second) -> first == second }
-        .map { (first, second) -> first + second }
+private fun Iterable<Sector>.isRowCompatible(): Boolean = false
+//    selfTensor()
 
-    val joinedSecondRowPairs = board.getCellsBySector(second)
-        .groupBy { it.coord.row }
-        .values
-        .map { row ->
-            row.mapNotNull { cell ->
-                if (cell.state is State.Valued) cell.state.value
-                else null
-            }
-        }.selfTensor()
-        .filterNot { (first, second) -> first == second }
-        .map { (first, second) -> first + second }
+private fun <T> Sector.rowCompatible(other: Sector, board: Board<T>) : Boolean =
+    if (this == other) true
+    else if (coords.none { tc -> tc.row in other.coords.map { oc -> oc.row } }) true
+    else bla(coords, other, board)
 
-    return (joinedFirstRowPairs.tensor(joinedSecondRowPairs)
-        .map { (first, second) -> first.count { firstel -> firstel in second } }
-        .maxOrNull() ?: 0) < 4
-}
+private fun <T> bla(coords : Iterable<Coord>, other:Sector, board: Board<T>) : Boolean=
+    coords.groupBy { it.row }
+        .toList()
+        .tensor(other.coords.groupBy { it.row }.toList())
+        .filterNot { (pa, pb) -> pa.first == pb.first }
+        .map { (pa, pb) -> Pair(pa.second, pb.second) }
+        .map { (la, lb) -> Pair(la.map { ca -> board.get(ca) }, lb.map { cb -> board.get(cb) }) }
+        .none { (la, lb) -> la.intersect(lb).size > 4 }
 
-internal fun <T> areSectorsVerticalCompatible(board: Board<T>, first: Sector, second: Sector): Boolean {
-    val joinedFirstRowPairs = board.getCellsBySector(first)
-        .groupBy { it.coord.column }
-        .values
-        .map { column ->
-            column.mapNotNull { cell ->
-                if (cell.state is State.Valued) cell.state.value
-                else null
-            }
-        }.selfTensor()
-        .filterNot { (first, second) -> first == second }
-        .map { (first, second) -> first + second }
+private fun Iterable<Sector>.rows(): Iterable<Iterable<Sector>> =
+    groupBy { ss -> ss.coords.minByOrNull { cs -> cs.row }!! }.values
 
-    val joinedSecondRowPairs = board.getCellsBySector(second)
-        .groupBy { it.coord.column }
-        .values
-        .map { column ->
-            column.mapNotNull { cell ->
-                if (cell.state is State.Valued) cell.state.value
-                else null
-            }
-        }.selfTensor()
-        .filterNot { (first, second) -> first == second }
-        .map { (first, second) -> first + second }
+private fun Iterable<Sector>.columns(): Iterable<Iterable<Sector>> =
+    groupBy { ss -> ss.coords.minByOrNull { cs -> cs.column }!! }.values
 
-    return (joinedFirstRowPairs.tensor(joinedSecondRowPairs)
-        .map { (first, second) -> first.count { firstel -> firstel in second } }
-        .maxOrNull() ?: 0) < 4
-}
-
-internal fun <T> Board<T>.sameRowSectors(sector: Sector) = sectors.filter { sec ->
-    sec.coords.any { boardCoord ->
-        boardCoord.row in sector.coords.map { coord ->
-            coord.row
-        }
-    }
-}.filterNot { it == sector }
-
-internal fun <T> Board<T>.sameColumnSectors(sector: Sector) = sectors.filter { sec ->
-    sec.coords.any { boardCoord ->
-        boardCoord.column in sector.coords.map { coord ->
-            coord.column
-        }
-    }
-}.filterNot { it == sector }
-
+private fun <T> Board<T>.get(coord: Coord): State<out T> = cells.first { it.coord == coord }.state
