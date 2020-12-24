@@ -7,20 +7,20 @@ import classic.createClassicBoard
 //add elements to cells of classic board
 internal tailrec fun <T> populateBoard(elements: Iterable<T>): Board<T> {
     try {
-        return fillSectors(createClassicBoard(), elements)
+        return fillSectors(createClassicBoard(elements))
     } catch (re: RetryException) {
         re //breakpoint helper
     }
     return populateBoard(elements)
 }
 
-private fun <T> fillSectors(board: Board<T>, elements: Iterable<T>): Board<T> {
+private fun <T> fillSectors(board: Board<T>): Board<T> {
 
     tailrec fun worker(board: Board<T>): Board<T> {
         val empties = board.getUnfilledSectors()
 
         return if (empties.none()) board
-        else worker(populateSector(board, empties.first(), elements))
+        else worker(populateSector(board, empties.first()))
     }
     return worker(board)
 }

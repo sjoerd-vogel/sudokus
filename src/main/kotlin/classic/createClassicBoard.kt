@@ -7,7 +7,8 @@ import board.Sector
 import selfTensor
 
 //create a classic sudoku board
-fun <T> createClassicBoard(): Board<T> = Board(defaultSectors(), defaultCells())
+fun createClassicBoard(): Board<Int> = createClassicBoard(1..9)
+fun <T> createClassicBoard(values: Iterable<T>): Board<T> = Board(values, defaultSectors(), defaultCells())
 
 private fun <T> defaultCells(): Iterable<Cell<T>> = (1..9).selfTensor()
     .map { (column, row) -> Cell(Coord(column, row)) }

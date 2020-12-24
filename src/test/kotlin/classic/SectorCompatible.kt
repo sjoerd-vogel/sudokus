@@ -35,7 +35,7 @@ class SectorCompatible {
         "-------------------------------------"
     ).joinToString("", "", "")
 
-    private val verGood = createClassicBoard<String>()
+    private val verGood = createClassicBoard((1..9).map { i -> i.toString() })
         .set(Coord(1, 1), "1").set(Coord(2, 1), "4")
         .set(Coord(1, 2), "2").set(Coord(2, 2), "5")
         .set(Coord(1, 3), "3").set(Coord(2, 3), "6")
@@ -111,7 +111,7 @@ class SectorCompatible {
     }
 
     private fun <T> Board<T>.transpose(): Board<T> {
-        val empty = Board<T>(sectors, cells.map { Cell(it.coord, State.Empty) })
+        val empty = Board<T>(values, sectors, cells.map { Cell(it.coord, State.Empty) })
         tailrec fun work(cells: Iterable<Cell<T>>, board: Board<T>): Board<T> {
             if (cells.none()) return board
             val first = cells.first()
@@ -139,7 +139,10 @@ class SectorCompatible {
                     if (string == " ") Cell<String>(Coord(row = row + 1, column = column + 1), State.Empty)
                     else Cell(Coord(row = row + 1, column = column + 1), State.Valued(string))
                 }
-            }.fold(createClassicBoard(), { board, cell -> board.set(cell) })
+            }.fold(
+                createClassicBoard((1..9).map { i -> i.toString() }),
+                { board, cell -> board.set(cell) }
+            )
 
 
 }

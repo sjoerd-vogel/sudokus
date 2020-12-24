@@ -2,6 +2,7 @@ package board
 
 //a classic 9x9, 3x3 sectored sudoku board
 data class Board<T>(
+    val values: Iterable<T>,
     val sectors: Iterable<Sector>,
     val cells: Iterable<Cell<T>>
 ) {
@@ -20,6 +21,7 @@ data class Board<T>(
         )
 
     fun set(coord: Coord, value: T): Board<T> = Board(
+        values,
         sectors,
         cells.map {
             if (it.coord != coord) it
@@ -28,6 +30,7 @@ data class Board<T>(
     )
 
     fun set(cell: Cell<T>): Board<T> = Board(
+        values,
         sectors,
         cells.map {
             if (it.coord != cell.coord) it
