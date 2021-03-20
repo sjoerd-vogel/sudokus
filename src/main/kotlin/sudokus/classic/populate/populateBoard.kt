@@ -5,13 +5,13 @@ import sudokus.board.State
 import sudokus.classic.createClassicBoard
 
 //add elements to cells of sudokus.classic sudokus.board
-internal tailrec fun populateBoard(elements: Iterable<Int>): Board {
+internal tailrec fun populateBoard(): Board {
     try {
-        return fillSectors(createClassicBoard(elements))
+        return fillSectors(createClassicBoard())
     } catch (re: RetryException) {
         re //breakpoint helper
     }
-    return populateBoard(elements)
+    return populateBoard()
 }
 
 private fun fillSectors(board: Board): Board {

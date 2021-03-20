@@ -35,7 +35,7 @@ class SectorCompatible {
         "-------------------------------------"
     ).joinToString("", "", "")
 
-    private val verGood = createClassicBoard(1..9)
+    private val verGood = createClassicBoard()
         .set(Coord(1, 1), 1).set(Coord(2, 1), 4)
         .set(Coord(1, 2), 2).set(Coord(2, 2), 5)
         .set(Coord(1, 3), 3).set(Coord(2, 3), 6)
@@ -145,7 +145,7 @@ class SectorCompatible {
                     else Cell(Coord(row = row + 1, column = column + 1), State.Valued(Integer.parseInt(string)))
                 }
             }.fold(
-                createClassicBoard(1..9),
+                createClassicBoard(),
                 { board, cell -> board.set(cell) }
             )
 

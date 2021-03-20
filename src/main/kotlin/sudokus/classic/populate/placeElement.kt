@@ -9,7 +9,6 @@ internal fun  placeElement(board: Board, sector: Sector, coord: Coord): Board {
     return board.set(
         coord,
         board.values.filter { isAllowedByGameRules(board, coord, it) }
-//            .filter { sectorCompatible(sudokus.board, coord, sector, it) }
             .randomOrNull() ?: throw RetryException(board)
     )
 }

@@ -8,7 +8,7 @@ import selfTensor
 
 //create a sudokus.classic sudoku sudokus.board
 fun createClassicBoard(): Board = createClassicBoard(1..9)
-fun createClassicBoard(values: Iterable<Int>): Board = Board(values, defaultSectors(), defaultCells())
+private fun createClassicBoard(values: Iterable<Int>): Board = Board(values, defaultSectors(), defaultCells())
 
 private fun defaultCells(): Iterable<Cell> = (1..9).selfTensor()
     .map { (column, row) -> Cell(Coord(column, row)) }
