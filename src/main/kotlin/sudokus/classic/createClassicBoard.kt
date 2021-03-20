@@ -1,12 +1,12 @@
-package classic
+package sudokus.classic
 
-import board.Board
-import board.Cell
-import board.Coord
-import board.Sector
+import sudokus.board.Board
+import sudokus.board.Cell
+import sudokus.board.Coord
+import sudokus.board.Sector
 import selfTensor
 
-//create a classic sudoku board
+//create a sudokus.classic sudoku sudokus.board
 fun createClassicBoard(): Board = createClassicBoard(1..9)
 fun createClassicBoard(values: Iterable<Int>): Board = Board(values, defaultSectors(), defaultCells())
 

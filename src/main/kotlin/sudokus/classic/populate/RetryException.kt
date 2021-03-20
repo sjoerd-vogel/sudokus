@@ -1,5 +1,5 @@
-package classic.populate
+package sudokus.classic.populate
 
-import board.Board
+import sudokus.board.Board
 
 internal class RetryException(val board: Board) : RuntimeException()

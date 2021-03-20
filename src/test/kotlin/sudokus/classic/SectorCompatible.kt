@@ -1,11 +1,11 @@
-package classic
+package sudokus.classic
 
-import board.Board
-import board.Cell
-import board.Coord
-import board.State
-import classic.populate.areSectorsHorizontalCompatible
-import classic.populate.areSectorsVerticalCompatible
+import sudokus.board.Board
+import sudokus.board.Cell
+import sudokus.board.Coord
+import sudokus.board.State
+import sudokus.classic.populate.areSectorsHorizontalCompatible
+import sudokus.classic.populate.areSectorsVerticalCompatible
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

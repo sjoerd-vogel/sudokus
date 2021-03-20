@@ -1,4 +1,4 @@
-package board
+package sudokus.board
 
 interface State {
     object Empty : State {

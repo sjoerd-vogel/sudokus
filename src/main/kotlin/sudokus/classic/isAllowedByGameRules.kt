@@ -1,9 +1,9 @@
-package classic
+package sudokus.classic
 
-import board.Board
-import board.Cell
-import board.Coord
-import board.State
+import sudokus.board.Board
+import sudokus.board.Cell
+import sudokus.board.Coord
+import sudokus.board.State
 
 internal fun  isAllowedByGameRules(board: Board, coord: Coord, element: Int): Boolean =
     notInSameColumn(board, coord, element) &&

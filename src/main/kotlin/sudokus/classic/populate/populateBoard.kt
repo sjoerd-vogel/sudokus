@@ -1,10 +1,10 @@
-package classic.populate
+package sudokus.classic.populate
 
-import board.Board
-import board.State
-import classic.createClassicBoard
+import sudokus.board.Board
+import sudokus.board.State
+import sudokus.classic.createClassicBoard
 
-//add elements to cells of classic board
+//add elements to cells of sudokus.classic sudokus.board
 internal tailrec fun populateBoard(elements: Iterable<Int>): Board {
     try {
         return fillSectors(createClassicBoard(elements))

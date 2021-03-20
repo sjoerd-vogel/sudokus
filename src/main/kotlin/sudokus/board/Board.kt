@@ -1,6 +1,6 @@
-package board
+package sudokus.board
 
-//a classic 9x9, 3x3 sectored sudoku board
+//a sudokus.classic 9x9, 3x3 sectored sudoku sudokus.board
 data class Board(
     val values: Iterable<Int>,
     val sectors: Iterable<Sector>,

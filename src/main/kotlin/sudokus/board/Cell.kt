@@ -1,4 +1,4 @@
-package board
+package sudokus.board
 
 data class Cell(
     val coord: Coord,

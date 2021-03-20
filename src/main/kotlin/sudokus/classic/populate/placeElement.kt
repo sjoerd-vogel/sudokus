@@ -1,15 +1,15 @@
-package classic.populate
+package sudokus.classic.populate
 
-import board.Board
-import board.Coord
-import board.Sector
-import classic.isAllowedByGameRules
+import sudokus.board.Board
+import sudokus.board.Coord
+import sudokus.board.Sector
+import sudokus.classic.isAllowedByGameRules
 
 internal fun  placeElement(board: Board, sector: Sector, coord: Coord): Board {
     return board.set(
         coord,
         board.values.filter { isAllowedByGameRules(board, coord, it) }
-//            .filter { sectorCompatible(board, coord, sector, it) }
+//            .filter { sectorCompatible(sudokus.board, coord, sector, it) }
             .randomOrNull() ?: throw RetryException(board)
     )
 }

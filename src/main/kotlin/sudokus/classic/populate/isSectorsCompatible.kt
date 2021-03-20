@@ -1,10 +1,10 @@
-package classic.populate
+package sudokus.classic.populate
 
-import board.Board
-import board.Board.Companion.getCellsBySector
-import board.Coord
-import board.Sector
-import board.State
+import sudokus.board.Board
+import sudokus.board.Board.Companion.getCellsBySector
+import sudokus.board.Coord
+import sudokus.board.Sector
+import sudokus.board.State
 import selfTensor
 import tensor
 
