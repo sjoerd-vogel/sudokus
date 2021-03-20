@@ -35,45 +35,51 @@ class SectorCompatible {
         "-------------------------------------"
     ).joinToString("", "", "")
 
-    private val verGood = createClassicBoard((1..9).map { i -> i.toString() })
-        .set(Coord(1, 1), "1").set(Coord(2, 1), "4")
-        .set(Coord(1, 2), "2").set(Coord(2, 2), "5")
-        .set(Coord(1, 3), "3").set(Coord(2, 3), "6")
+    private val verGood = createClassicBoard(1..9)
+        .set(Coord(1, 1), 1).set(Coord(2, 1), 4)
+        .set(Coord(1, 2), 2).set(Coord(2, 2), 5)
+        .set(Coord(1, 3), 3).set(Coord(2, 3), 6)
 
-        .set(Coord(1, 4), "4").set(Coord(2, 4), "8")
-        .set(Coord(1, 5), "5").set(Coord(2, 5), "7")
-        .set(Coord(1, 6), "6")
+        .set(Coord(1, 4), 4).set(Coord(2, 4), 8)
+        .set(Coord(1, 5), 5).set(Coord(2, 5), 7)
+        .set(Coord(1, 6), 6)
 
 
-    private val verBad = verGood.set(Coord(2, 6), "1")
-
-    @Test
-    fun badVertical() = assertFalse({ board: Board<String> ->
-        areSectorsVerticalCompatible(board,
-            board.sectors.first { Coord(1, 1) in it.coords },
-            board.sectors.first { Coord(1, 4) in it.coords })
-    }(verBad))
+    private val verBad = verGood.set(Coord(2, 6), 1)
 
     @Test
-    fun goodVertical() = assertTrue({ board: Board<String> ->
-        areSectorsVerticalCompatible(board,
-            board.sectors.first { Coord(1, 1) in it.coords },
-            board.sectors.first { Coord(1, 4) in it.coords })
-    }(verGood))
+    fun badVertical() = assertFalse(
+        areSectorsVerticalCompatible(verBad,
+            verBad.sectors.first { Coord(1, 1) in it.coords },
+            verBad.sectors.first { Coord(1, 4) in it.coords })
+    )
 
     @Test
-    fun badHorizontal() = assertFalse({ board: Board<String> ->
-        areSectorsHorizontalCompatible(board,
-            board.sectors.first { Coord(1, 1) in it.coords },
-            board.sectors.first { Coord(4, 1) in it.coords })
-    }(verBad.transpose()))
+    fun goodVertical() = assertTrue(
+        areSectorsVerticalCompatible(verGood,
+            verGood.sectors.first { Coord(1, 1) in it.coords },
+            verGood.sectors.first { Coord(1, 4) in it.coords })
+    )
 
     @Test
-    fun goodHorizontal() = assertTrue({ board: Board<String> ->
-        areSectorsHorizontalCompatible(board,
-            board.sectors.first { Coord(1, 1) in it.coords },
-            board.sectors.first { Coord(1, 4) in it.coords })
-    }(verGood.transpose()))
+    fun badHorizontal() {
+        val p1 = verBad.transpose()
+        assertFalse(
+            areSectorsHorizontalCompatible(p1,
+                p1.sectors.first { Coord(1, 1) in it.coords },
+                p1.sectors.first { Coord(4, 1) in it.coords })
+        )
+    }
+
+    @Test
+    fun goodHorizontal() {
+        val p1 = verGood.transpose()
+        assertTrue(
+            areSectorsHorizontalCompatible(p1,
+                p1.sectors.first { Coord(1, 1) in it.coords },
+                p1.sectors.first { Coord(1, 4) in it.coords })
+        )
+    }
 
     @Test
     fun parse() {
@@ -110,9 +116,9 @@ class SectorCompatible {
 
     }
 
-    private fun <T> Board<T>.transpose(): Board<T> {
-        val empty = Board<T>(values, sectors, cells.map { Cell(it.coord, State.Empty) })
-        tailrec fun work(cells: Iterable<Cell<T>>, board: Board<T>): Board<T> {
+    private fun Board.transpose(): Board {
+        val empty = Board(values, sectors, cells.map { Cell(it.coord, State.Empty) })
+        tailrec fun work(cells: Iterable<Cell>, board: Board): Board {
             if (cells.none()) return board
             val first = cells.first()
             val tail = cells.tail()
@@ -125,22 +131,21 @@ class SectorCompatible {
     private fun Coord.transpose(): Coord = Coord(row = column, column = row)
     private fun <T> Iterable<T>.tail() = drop(1)
 
-    private fun String.parse(): Board<String> =
+    private fun String.parse(): Board =
         replace("\n", "")
             .replace("-", "")
             .replace("||", "|")
             .removeSuffix("|")
             .chunked(4)
-            .map { it.get(2) }
-            .map(Any::toString)
+            .map { it[2].toString() }
             .chunked(9)
             .flatMapIndexed { row, list ->
                 list.mapIndexed { column, string ->
-                    if (string == " ") Cell<String>(Coord(row = row + 1, column = column + 1), State.Empty)
-                    else Cell(Coord(row = row + 1, column = column + 1), State.Valued(string))
+                    if (string == " ") Cell(Coord(row = row + 1, column = column + 1), State.Empty)
+                    else Cell(Coord(row = row + 1, column = column + 1), State.Valued(Integer.parseInt(string)))
                 }
             }.fold(
-                createClassicBoard((1..9).map { i -> i.toString() }),
+                createClassicBoard(1..9),
                 { board, cell -> board.set(cell) }
             )
 

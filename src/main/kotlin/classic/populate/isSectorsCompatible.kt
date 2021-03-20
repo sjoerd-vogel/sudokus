@@ -8,13 +8,13 @@ import board.State
 import selfTensor
 import tensor
 
-fun <T> sectorCompatible(board: Board<T>, coord: Coord, sector: Sector, value: T): Boolean {
+fun sectorCompatible(board: Board, coord: Coord, sector: Sector, value: Int): Boolean {
     val updated = board.set(coord, value)
     return updated.sameRowSectors(sector).none { areSectorsHorizontalCompatible(updated, sector, it) } &&
             updated.sameColumnSectors(sector).none { areSectorsVerticalCompatible(updated, sector, it) }
 }
 
-internal fun <T> areSectorsHorizontalCompatible(board: Board<T>, first: Sector, second: Sector): Boolean {
+internal fun areSectorsHorizontalCompatible(board: Board, first: Sector, second: Sector): Boolean {
     val joinedFirstRowPairs = board.getCellsBySector(first)
         .groupBy { it.coord.row }
         .values
@@ -44,7 +44,7 @@ internal fun <T> areSectorsHorizontalCompatible(board: Board<T>, first: Sector, 
         .maxOrNull() ?: 0) < 4
 }
 
-internal fun <T> areSectorsVerticalCompatible(board: Board<T>, first: Sector, second: Sector): Boolean {
+internal fun  areSectorsVerticalCompatible(board: Board, first: Sector, second: Sector): Boolean {
     val joinedFirstRowPairs = board.getCellsBySector(first)
         .groupBy { it.coord.column }
         .values
@@ -74,7 +74,7 @@ internal fun <T> areSectorsVerticalCompatible(board: Board<T>, first: Sector, se
         .maxOrNull() ?: 0) < 4
 }
 
-internal fun <T> Board<T>.sameRowSectors(sector: Sector) = sectors.filter { sec ->
+internal fun  Board.sameRowSectors(sector: Sector) = sectors.filter { sec ->
     sec.coords.any { boardCoord ->
         boardCoord.row in sector.coords.map { coord ->
             coord.row
@@ -82,7 +82,7 @@ internal fun <T> Board<T>.sameRowSectors(sector: Sector) = sectors.filter { sec 
     }
 }.filterNot { it == sector }
 
-internal fun <T> Board<T>.sameColumnSectors(sector: Sector) = sectors.filter { sec ->
+internal fun  Board.sameColumnSectors(sector: Sector) = sectors.filter { sec ->
     sec.coords.any { boardCoord ->
         boardCoord.column in sector.coords.map { coord ->
             coord.column

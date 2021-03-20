@@ -5,7 +5,7 @@ import board.State
 import classic.createClassicBoard
 
 //add elements to cells of classic board
-internal tailrec fun <T> populateBoard(elements: Iterable<T>): Board<T> {
+internal tailrec fun populateBoard(elements: Iterable<Int>): Board {
     try {
         return fillSectors(createClassicBoard(elements))
     } catch (re: RetryException) {
@@ -14,9 +14,9 @@ internal tailrec fun <T> populateBoard(elements: Iterable<T>): Board<T> {
     return populateBoard(elements)
 }
 
-private fun <T> fillSectors(board: Board<T>): Board<T> {
+private fun fillSectors(board: Board): Board {
 
-    tailrec fun worker(board: Board<T>): Board<T> {
+    tailrec fun worker(board: Board): Board {
         val empties = board.getUnfilledSectors()
 
         return if (empties.none()) board
@@ -25,7 +25,7 @@ private fun <T> fillSectors(board: Board<T>): Board<T> {
     return worker(board)
 }
 
-private fun <T> Board<T>.getUnfilledSectors() = sectors.filter { sec ->
+private fun Board.getUnfilledSectors() = sectors.filter { sec ->
     sec.coords.any { secc ->
         cells.any { cel -> cel.state == State.Empty && cel.coord == secc }
     }

@@ -1,8 +1,8 @@
 package board
 
-data class Cell<T>(
+data class Cell(
     val coord: Coord,
-    val state: State<out T> = State.Empty
+    val state: State = State.Empty
 ) {
     override fun toString(): String = "${coord} -> ${state}"
 }

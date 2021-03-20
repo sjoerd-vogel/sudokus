@@ -17,5 +17,5 @@ data class Coord(val column: Int, val row: Int) {
         row = this.row * other.row
     )
 
-    override fun toString(): String = "(column=${column},row=${row})"
+    override fun toString(): String = "(column=$column,row=$row)"
 }

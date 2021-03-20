@@ -1,11 +1,11 @@
 package board
 
-interface State<T> {
-    object Empty : State<Nothing> {
+interface State {
+    object Empty : State {
         override fun toString(): String = " "
     }
 
-    data class Valued<T>(val value: T) : State<T> {
-        override fun toString(): String = "${value}"
+    data class Valued(val value: Int) : State {
+        override fun toString(): String = "$value"
     }
 }

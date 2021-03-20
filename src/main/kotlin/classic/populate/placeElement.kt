@@ -5,7 +5,7 @@ import board.Coord
 import board.Sector
 import classic.isAllowedByGameRules
 
-internal fun <T> placeElement(board: Board<T>, sector: Sector, coord: Coord): Board<T> {
+internal fun  placeElement(board: Board, sector: Sector, coord: Coord): Board {
     return board.set(
         coord,
         board.values.filter { isAllowedByGameRules(board, coord, it) }

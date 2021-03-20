@@ -5,34 +5,33 @@ import board.Cell
 import board.Coord
 import board.State
 
-internal fun <T> isAllowedByGameRules(board: Board<T>, coord: Coord, element: T): Boolean =
+internal fun  isAllowedByGameRules(board: Board, coord: Coord, element: Int): Boolean =
     notInSameColumn(board, coord, element) &&
             notInSameRow(board, coord, element) &&
             notInSameSector(board, coord, element)
 
-private fun <T> notInSameRow(board: Board<T>, coord: Coord, element: T): Boolean =
+private fun  notInSameRow(board: Board, coord: Coord, element: Int): Boolean =
     board.getRow(coord.row)
         .values()
         .none { it == element }
 
-private fun <T> notInSameColumn(board: Board<T>, coord: Coord, element: T): Boolean =
+private fun  notInSameColumn(board: Board, coord: Coord, element: Int): Boolean =
     board.getColumn(coord.column).values().none { it == element }
 
-private fun <T> notInSameSector(board: Board<T>, coord: Coord, element: T): Boolean =
+private fun  notInSameSector(board: Board, coord: Coord, element: Int): Boolean =
     board.sectors.first { coord in it.coords }
         .coords.map { board.getCell(it) }
         .values()
         .none { it == element }
 
-private fun <T> Iterable<Cell<T>>.values(): Iterable<T> = this.mapNotNull {
+private fun  Iterable<Cell>.values(): Iterable<Int> = this.mapNotNull {
     if (it.state is State.Valued) it.state.value else null
 }
 
-private fun <T> Board<T>.getCell(coord: Coord): Cell<T> = cells
-    .filter { it.coord == coord }.first()
+private fun  Board.getCell(coord: Coord): Cell = cells.first { it.coord == coord }
 
-private fun <T> Board<T>.getRow(row: Int): Iterable<Cell<T>> = cells
+private fun  Board.getRow(row: Int): Iterable<Cell> = cells
     .filter { it.coord.row == row }
 
-private fun <T> Board<T>.getColumn(column: Int): Iterable<Cell<T>> = cells
+private fun  Board.getColumn(column: Int): Iterable<Cell> = cells
     .filter { it.coord.column == column }

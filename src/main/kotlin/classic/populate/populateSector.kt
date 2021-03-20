@@ -5,8 +5,8 @@ import board.Board.Companion.getCellsBySector
 import board.Sector
 import board.State
 
-internal fun <T> populateSector(board: Board<T>, sector: Sector): Board<T> {
-    tailrec fun worker(board: Board<T>): Board<T> {
+internal fun populateSector(board: Board, sector: Sector): Board {
+    tailrec fun worker(board: Board): Board {
         val empties = board.getCellsBySector(sector)
             .filter { it.state == State.Empty }
 

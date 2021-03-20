@@ -1,10 +1,10 @@
 package board
 
 //a classic 9x9, 3x3 sectored sudoku board
-data class Board<T>(
-    val values: Iterable<T>,
+data class Board(
+    val values: Iterable<Int>,
     val sectors: Iterable<Sector>,
-    val cells: Iterable<Cell<T>>
+    val cells: Iterable<Cell>
 ) {
     override fun toString(): String = cells
         .sortedBy { it.coord.row }
@@ -20,7 +20,7 @@ data class Board<T>(
             "\n-------------------------------------"
         )
 
-    fun set(coord: Coord, value: T): Board<T> = Board(
+    fun set(coord: Coord, value: Int): Board = Board(
         values,
         sectors,
         cells.map {
@@ -29,7 +29,7 @@ data class Board<T>(
         }
     )
 
-    fun set(cell: Cell<T>): Board<T> = Board(
+    fun set(cell: Cell): Board = Board(
         values,
         sectors,
         cells.map {
@@ -39,7 +39,7 @@ data class Board<T>(
     )
 
     companion object {
-        fun <T> Board<T>.getCellsBySector(sector: Sector) = cells
+        fun Board.getCellsBySector(sector: Sector) = cells
             .filter { it.coord in sector.coords }
     }
 
