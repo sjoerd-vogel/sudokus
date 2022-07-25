@@ -12,8 +12,9 @@ private class ParseStringToBoardKtTest {
     fun itShouldParseToTheExpectedBoard() {
         val board = parse(testBoard)
         assertEquals(81, board.keys.size)
-        assertEquals(2, board.values.count { it.value != null })
+        assertEquals(1, board.values.count { it.value == null })
         assertTrue(board.values.none { it.fixed })
+        println(board.print())
         assertEquals(testBoard, board.print())
     }
 
