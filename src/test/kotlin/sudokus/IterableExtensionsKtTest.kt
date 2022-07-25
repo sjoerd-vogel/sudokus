@@ -6,6 +6,21 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 internal class IterableExtensionsKtTest {
+    @Test
+    fun itShouldReturnCombinations(){
+        assertEquals(
+            "[[1, 3], [1, 4], [2, 3], [2, 4]]", listOf((1..2), (3..4))
+                .combinations().toList().toString()
+        )
+        val combs2 = listOf((1..3), (2..4), (2..3))
+            .combinations().toList()
+        //no duplicates
+        assertTrue(combs2.groupBy { it }.values.map { it.count() }.fold(true) { acc, i -> acc && i < 2 })
+        assertEquals(
+            "[[1, 2, 2], [1, 2, 3], [1, 3, 2], [1, 3, 3], [1, 4, 2], [1, 4, 3], [2, 2, 2], [2, 2, 3], [2, 3, 2], [2, 3, 3], [2, 4, 2], [2, 4, 3], [3, 2, 2], [3, 2, 3], [3, 3, 2], [3, 3, 3], [3, 4, 2], [3, 4, 3]]",
+            combs2.toString()
+        )
+    }
 
     @Test
     fun itShouldProperlyTensorTogetherBothLists() {
